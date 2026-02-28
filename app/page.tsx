@@ -155,7 +155,7 @@ export default function HomePage() {
         <header className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
           <div className="flex items-center gap-3">
             <button className="rounded-lg border border-[var(--border)] px-2 py-1 md:hidden" onClick={() => setSidebarOpen(true)}>☰</button>
-            <Image src="/loom-logo.svg" alt="Loom" width={126} height={34} priority className="h-8 w-auto" />
+            <Image src="/loom-logo.svg" alt="Loom" width={210} height={52} priority className="h-10 w-auto" />
           </div>
 
           <div className="flex items-center gap-2">
