@@ -9,9 +9,13 @@ const examples = [
 
 export function TagChips({ onPick }: { onPick: (text: string) => void }) {
   return (
-    <div className="mb-3 flex flex-wrap gap-2">
+    <div className="mb-4 flex flex-wrap gap-2">
       {examples.map((x) => (
-        <button key={x} onClick={() => onPick(x)} className="rounded-full border px-3 py-1 text-xs hover:border-accent-500">
+        <button
+          key={x}
+          onClick={() => onPick(x)}
+          className="rounded-full border border-[var(--border)] bg-[var(--surface)]/70 px-3 py-1.5 text-xs text-[var(--muted)] hover:border-[var(--border-hover)] hover:text-[var(--text)]"
+        >
           {x}
         </button>
       ))}

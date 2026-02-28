@@ -13,7 +13,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { exportRowsToCsv, exportRowsToJson } from "@/lib/export";
 import { runCohortQuery } from "@/lib/mock";
 import { readStorage, writeStorage } from "@/lib/storage";
-import { ActivityItem, AppMode, ChatContext, Message, ProjectOption, SavedCohort, CohortResult } from "@/lib/types";
+import { ActivityItem, AppMode, ChatContext, CohortResult, Message, ProjectOption, SavedCohort } from "@/lib/types";
 import { uid } from "@/lib/utils";
 
 const projects: ProjectOption[] = [
@@ -23,7 +23,7 @@ const projects: ProjectOption[] = [
 ];
 
 export default function HomePage() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [mode, setMode] = useState<AppMode>("feasibility");
   const [projectId, setProjectId] = useState("a");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -33,9 +33,11 @@ export default function HomePage() {
   const [audit, setAudit] = useState<ActivityItem[]>([]);
   const [exportOpen, setExportOpen] = useState(false);
   const [tableOpen, setTableOpen] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    setTheme(readStorage("theme", "light"));
+    setTheme(readStorage("theme", "dark"));
     setMode(readStorage("mode", "feasibility"));
     setProjectId(readStorage("projectId", "a"));
     setMessages(readStorage("messages", []));
@@ -45,7 +47,7 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.classList.toggle("light", theme === "light");
     writeStorage("theme", theme);
     writeStorage("mode", mode);
     writeStorage("projectId", projectId);
@@ -112,22 +114,12 @@ export default function HomePage() {
     addAudit(`Cohort v${version} saved`);
   };
 
-  return (
-    <main className="h-screen bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
-      <header className="flex items-center justify-between border-b px-4 py-3">
-        <div>
-          <h1 className="font-semibold">Hillary Cohort Builder</h1>
-          <p className="text-xs text-zinc-500">Mock/Offline • Dados da própria unidade codificados localmente • LGPD by design</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <ModeToggle mode={mode} setMode={setMode} />
-          <ThemeToggle theme={theme} onToggle={() => setTheme((t) => (t === "light" ? "dark" : "light"))} />
-          <button onClick={() => setExportOpen(true)} className="rounded bg-accent-600 px-3 py-1 text-sm text-white">Export</button>
-        </div>
-      </header>
+  const isEmpty = messages.length === 0;
 
-      <div className="grid h-[calc(100vh-65px)] grid-cols-12">
-        <div className="col-span-3"><LeftSidebar
+  return (
+    <main className="relative flex h-screen overflow-hidden text-[var(--text)]">
+      <div className="hidden md:block">
+        <LeftSidebar
           projects={projects}
           projectId={projectId}
           setProjectId={setProjectId}
@@ -137,17 +129,80 @@ export default function HomePage() {
           onDuplicate={(id) => { const c = saved.find((x) => x.id === id); if (c) { setSaved((s) => [{ ...c, id: uid(), name: `${c.name} copy`, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }, ...s]); addAudit("Cohort duplicated"); } }}
           history={history}
           audit={audit}
-        /></div>
+        />
+      </div>
 
-        <section className="col-span-6 flex h-full flex-col">
-          <Chat messages={messages} />
-          <div className="border-t p-4">
-            <TagChips onPick={handleSend} />
-            <Composer onSend={handleSend} />
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 bg-black/50 md:hidden" onClick={() => setSidebarOpen(false)}>
+          <div className="h-full" onClick={(e) => e.stopPropagation()}>
+            <LeftSidebar
+              projects={projects}
+              projectId={projectId}
+              setProjectId={setProjectId}
+              cohorts={saved.filter((s) => s.projectId === projectId)}
+              onLoad={(id) => { const c = saved.find((x) => x.id === id); if (c) { setResult(c.result); setCohortName(c.name); addAudit(`Loaded ${c.name}`); } setSidebarOpen(false); }}
+              onDelete={(id) => { setSaved((s) => s.filter((x) => x.id !== id)); addAudit("Cohort deleted"); }}
+              onDuplicate={(id) => { const c = saved.find((x) => x.id === id); if (c) { setSaved((s) => [{ ...c, id: uid(), name: `${c.name} copy`, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }, ...s]); addAudit("Cohort duplicated"); } }}
+              history={history}
+              audit={audit}
+            />
           </div>
-        </section>
+        </div>
+      )}
 
-        <div className="col-span-3">
+      <section className="relative flex min-w-0 flex-1 flex-col">
+        <header className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
+          <div className="flex items-center gap-3">
+            <button className="rounded-lg border border-[var(--border)] px-2 py-1 md:hidden" onClick={() => setSidebarOpen(true)}>☰</button>
+            <div className="h-6 w-6 rounded bg-[var(--accent)]/80" />
+            <div>
+              <h1 className="text-sm font-semibold">Hillary / Loom</h1>
+              <p className="text-xs text-[var(--muted)]">Cohort Builder</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <ModeToggle mode={mode} setMode={setMode} />
+            <ThemeToggle theme={theme} onToggle={() => setTheme((t) => (t === "light" ? "dark" : "light"))} />
+            <span className="hidden rounded-full border border-[var(--border)] px-2 py-1 text-xs text-[var(--muted)] sm:inline">PT-BR</span>
+            <span className="hidden rounded-full border border-[var(--border)] px-2 py-1 text-xs text-[var(--muted)] sm:inline">Demo</span>
+            <button onClick={() => setExportOpen(true)} className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1 text-sm hover:border-[var(--border-hover)]">Export</button>
+            <button onClick={() => setSummaryOpen(true)} className="rounded-full bg-[var(--accent)] px-3 py-1 text-sm text-white">Cohort</button>
+            <div className="grid h-8 w-8 place-items-center rounded-full border border-[var(--border)] text-xs">A</div>
+          </div>
+        </header>
+
+        <div className="mx-auto flex h-full w-full max-w-6xl flex-1 px-3 py-4 md:px-6">
+          <div className="glass flex w-full flex-1 flex-col rounded-2xl p-3 md:p-5">
+            {isEmpty ? (
+              <div className="flex h-full flex-col items-center justify-center">
+                <h2 className="mb-6 text-center text-3xl font-semibold md:text-5xl">
+                  Olá, como podemos ajudar <span className="text-violet-400">hoje</span>?
+                </h2>
+                <div className="w-full max-w-3xl">
+                  <TagChips onPick={handleSend} />
+                  <Composer onSend={handleSend} />
+                </div>
+              </div>
+            ) : (
+              <>
+                <Chat messages={messages} />
+                <div className="border-t border-[var(--border)] pt-4">
+                  <TagChips onPick={handleSend} />
+                  <Composer onSend={handleSend} />
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <div className={`fixed inset-y-0 right-0 z-50 w-full max-w-md transform border-l border-[var(--border)] bg-[#0a1020] p-4 transition-transform duration-200 ${summaryOpen ? "translate-x-0" : "translate-x-full"}`}>
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-sm font-semibold">Cohort Summary</h3>
+          <button onClick={() => setSummaryOpen(false)} className="rounded border border-[var(--border)] px-2 py-1 text-xs">Close</button>
+        </div>
+        <div className="h-[calc(100%-40px)] overflow-auto pr-1">
           <CohortSummary
             name={cohortName}
             setName={setCohortName}
@@ -165,6 +220,8 @@ export default function HomePage() {
           />
         </div>
       </div>
+
+      {summaryOpen && <button className="fixed inset-0 z-40 bg-black/30" onClick={() => setSummaryOpen(false)} aria-label="close summary backdrop" />}
 
       <ExportModal
         open={exportOpen}
