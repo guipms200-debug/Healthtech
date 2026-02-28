@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { Chat } from "@/components/Chat";
 import { CohortSummary } from "@/components/CohortSummary";
 import { Composer } from "@/components/Composer";
@@ -154,10 +155,10 @@ export default function HomePage() {
         <header className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
           <div className="flex items-center gap-3">
             <button className="rounded-lg border border-[var(--border)] px-2 py-1 md:hidden" onClick={() => setSidebarOpen(true)}>☰</button>
-            <div className="h-6 w-6 rounded bg-[var(--accent)]/80" />
+            <Image src="/loom-logo.svg" alt="Loom" width={126} height={34} priority className="h-8 w-auto" />
             <div>
-              <h1 className="text-sm font-semibold">Hillary / Loom</h1>
-              <p className="text-xs text-[var(--muted)]">Cohort Builder</p>
+              <h1 className="text-sm font-semibold">Loom Cohort Builder</h1>
+              <p className="text-xs text-[var(--muted)]">Mock / Offline</p>
             </div>
           </div>
 
