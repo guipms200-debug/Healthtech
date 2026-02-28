@@ -161,8 +161,6 @@ export default function HomePage() {
           <div className="flex items-center gap-2">
             <ModeToggle mode={mode} setMode={setMode} />
             <ThemeToggle theme={theme} onToggle={() => setTheme((t) => (t === "light" ? "dark" : "light"))} />
-            <span className="hidden rounded-full border border-[var(--border)] px-2 py-1 text-xs text-[var(--muted)] sm:inline">PT-BR</span>
-            <span className="hidden rounded-full border border-[var(--border)] px-2 py-1 text-xs text-[var(--muted)] sm:inline">Demo</span>
             <button onClick={() => setExportOpen(true)} className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1 text-sm hover:border-[var(--border-hover)]">Export</button>
             <button onClick={() => setSummaryOpen(true)} className="rounded-full bg-[var(--accent)] px-3 py-1 text-sm text-white">Cohort</button>
             <div className="grid h-8 w-8 place-items-center rounded-full border border-[var(--border)] text-xs">A</div>
@@ -173,7 +171,7 @@ export default function HomePage() {
           <div className="glass flex w-full flex-1 flex-col rounded-2xl p-3 md:p-5">
             {isEmpty ? (
               <div className="flex h-full flex-col items-center justify-center">
-                <h2 className="mb-6 text-center text-3xl font-semibold md:text-5xl">
+                <h2 className="mb-6 text-center text-3xl font-medium tracking-tight leading-snug md:text-5xl">
                   Olá, como podemos ajudar <span className="text-violet-400">hoje</span>?
                 </h2>
                 <div className="w-full max-w-3xl">
