@@ -41,3 +41,9 @@ Veja `lib/types.ts` para:
 - Sem IA real e sem DB (somente mocks determinísticos).
 - Export disponível em CSV/JSON (`lib/export.ts`).
 - TODOs de autenticação, streaming real e permissões por projeto estão no stub.
+
+## Deploy no Vercel (evitar NOT_FOUND)
+- Garanta que o **Root Directory** do projeto no Vercel esteja apontando para esta pasta (`/workspace/Healthtech` no repositório).
+- Use configuração padrão de Next.js (`Framework Preset: Next.js`).
+- Este projeto usa `app/page.tsx` como rota raiz (`/`), então um build/deploy bem-sucedido deve servir a home diretamente.
+- Para compatibilidade máxima com Vercel, a configuração foi ajustada para `next.config.mjs`.
