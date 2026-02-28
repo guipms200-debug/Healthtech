@@ -47,3 +47,17 @@ Veja `lib/types.ts` para:
 - Use configuração padrão de Next.js (`Framework Preset: Next.js`).
 - Este projeto usa `app/page.tsx` como rota raiz (`/`), então um build/deploy bem-sucedido deve servir a home diretamente.
 - Para compatibilidade máxima com Vercel, a configuração foi ajustada para `next.config.mjs`.
+
+
+## Erro de deploy Vercel: `No Output Directory named "public" found`
+Se o Vercel estiver configurado com **Output Directory = public**, o deploy de Next.js falha com essa mensagem.
+
+Este projeto gera saída em `.next` (SSR/App Router), não em `public`.
+
+Checklist de correção no Vercel:
+1. `Framework Preset` = **Next.js**
+2. `Build Command` = `next build`
+3. `Output Directory` = **vazio (recomendado)** ou `.next`
+4. `Root Directory` apontando para a pasta correta do projeto
+
+Também foi adicionado `vercel.json` com configuração explícita para evitar esse erro.
