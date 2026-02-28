@@ -156,10 +156,6 @@ export default function HomePage() {
           <div className="flex items-center gap-3">
             <button className="rounded-lg border border-[var(--border)] px-2 py-1 md:hidden" onClick={() => setSidebarOpen(true)}>☰</button>
             <Image src="/loom-logo.svg" alt="Loom" width={126} height={34} priority className="h-8 w-auto" />
-            <div>
-              <h1 className="text-sm font-semibold">Loom Cohort Builder</h1>
-              <p className="text-xs text-[var(--muted)]">Mock / Offline</p>
-            </div>
           </div>
 
           <div className="flex items-center gap-2">
