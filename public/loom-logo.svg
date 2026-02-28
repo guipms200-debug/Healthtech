@@ -1,0 +1,29 @@
+<svg width="520" height="140" viewBox="0 0 520 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="iconGrad" x1="40" y1="20" x2="180" y2="130" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B772FF"/>
+      <stop offset="1" stop-color="#5B21B6"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="210" y1="26" x2="470" y2="122" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#4C1D95"/>
+    </linearGradient>
+    <filter id="softGlow" x="0" y="0" width="520" height="140" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#6D28D9" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softGlow)">
+    <g transform="translate(96 70) rotate(-45)">
+      <rect x="-18" y="-55" width="36" height="110" rx="7" fill="url(#iconGrad)"/>
+      <rect x="-55" y="-18" width="110" height="36" rx="7" fill="url(#iconGrad)"/>
+    </g>
+
+    <rect x="64" y="38" width="24" height="24" rx="5" transform="rotate(-45 64 38)" fill="url(#iconGrad)"/>
+    <rect x="112" y="38" width="24" height="24" rx="5" transform="rotate(-45 112 38)" fill="url(#iconGrad)"/>
+    <rect x="64" y="100" width="24" height="24" rx="5" transform="rotate(-45 64 100)" fill="url(#iconGrad)"/>
+    <rect x="112" y="100" width="24" height="24" rx="5" transform="rotate(-45 112 100)" fill="url(#iconGrad)"/>
+
+    <text x="205" y="102" fill="url(#textGrad)" font-size="106" font-family="Inter, Poppins, Segoe UI, Arial" font-weight="700" letter-spacing="-2.2">Loom</text>
+  </g>
+</svg>
